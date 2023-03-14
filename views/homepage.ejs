@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/styles/layout.scss">
+  <title>My Story</title>
+
+</head>
+
+<body>
+  <main>
+    <h1>Authors Stories</h1>
+    <div class="story-line">
+    </div>
+    <div class="stories-form">
+      <h2>Write Your Own Story</h2>
+      <form action="/stories" method="POST">
+        <label for="title">title:</label>
+        <textarea type="text" id="title" name="title"></textarea>
+        <br>
+        <label for="content">Enter Your Story Here!</label>
+        <textarea type="text" id="content" name="first_story"></textarea>
+        <br>
+        <label for="img_url">Enter In Your Image URL Here:</label>
+        <textarea type="URL" id="Image" name="img_url"></textarea>
+        <br>
+        <button class="button" type="submit" value="submit">Submit!</button>
+      </form>
+    </div>
+  </main>
+</body>
+
+</html>
