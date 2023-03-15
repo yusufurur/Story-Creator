@@ -61,5 +61,16 @@ router.post('/', (req, res) => {
     .catch((err) => console.log("Error for addStory", err));
 });
 
+router.put('/:id', (req, res) => {
+  countContributions(req.params.id)
+    .then(({ rows }) => {
+      updateAcceptedAtTrue(rows.length + 1, req.body.contributionsId)
+        .then((response) => {
+          return getCompletedStory(req.params.id);
+        })
+        .catch((err) => console.log("Error for updateAcceptedAtTrue", err));
+    })
+    .catch((err) => console.log("Error for countContributions", err));
+});
 
 
