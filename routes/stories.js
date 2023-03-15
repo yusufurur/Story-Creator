@@ -1,3 +1,4 @@
+const { response } = require('express');
 const express = require('express');
 const router = express.Router();
 
@@ -42,6 +43,13 @@ router.get('/:id', (req, res) => {
         .catch((err) => console.log("Error for getStoriesContributions", err));
     })
     .catch((err) => console.log("Error for Story.findById", err));
+});
+
+router.post('/', (req, res) => {
+  addContribution({ story_id: req.params.id, name_id: req.session.userid, ...req.body })
+    .then((response) => {
+      res.redirect('/stories/$(req.params.id')
+    })
 });
 
 
