@@ -1,5 +1,4 @@
-const { response } = require('express');
-const express = require('express');
+const { express } = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -72,5 +71,13 @@ router.put('/:id', (req, res) => {
     })
     .catch((err) => console.log("Error for countContributions", err));
 });
+
+router.post('/:id/post', (req, res) => {
+  storyPosted(req.params.id)
+  .then(() => {
+    res.redirect('/stories/me')
+  })
+  .catch((err) => console.log("Error for storyPosted", err));
+})
 
 
