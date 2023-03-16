@@ -19,8 +19,20 @@ const getUserById = (id) => {
     });
 };
 
+const getUserStoriesByUserId = (id) => {
+  const queryString = `SELECT stories.*
+  FROM stories
+  JOIN users ON users.id = stories.name_id
+  WHERE users.id = $1`;
+  return db.query(queryString, [id])
+    .then((response) => {
+      return response.rows;
+    });
+};
+
 
 module.exports = {
   getUsers,
   getUserById,
+  getUserStoriesByUserId
 };
