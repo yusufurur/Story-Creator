@@ -22,7 +22,20 @@ const browseSelectStories = (id) => {
     .catch((err) => console.log("Error for browseSelectStories", err));
 }
 
+const getStoryById = (id) => {
+  return db.query(`SELECT stories.*, users.name, contributions.text_addon,
+  contributions.accepted_at FROM stories JOIN users ON
+  users.id = stories.name_id
+  JOIN contributions ON contributions.id = story_id
+  WHERE stories.id = $1;`, [id])
+  .then((response) => {
+    return response.rows[0];
+  })
+  .catch((err) => console.log("Error for getStoryById", err));
+}
+
 module.exports = {
   browseStory,
-  browseSelectStories
+  browseSelectStories,
+  getStoryById
 }
