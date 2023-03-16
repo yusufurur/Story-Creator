@@ -18,3 +18,9 @@ const getUserById = (id) => {
       return response.rows[0];
     });
 };
+
+
+module.exports = {
+  getUsers,
+  getUserById,
+};
