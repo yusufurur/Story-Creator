@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+  <!-- External JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <script type="text/javascript" src="/scripts/app.js"></script>
+  <link rel='stylesheet' href='/styles/layout.css'>
+  <title>BooksAreUs</title>
+</head>
+
+<body>
+  <!-- Checks to see if its the user logged in -->
+  <%- include('partials/_header') %>
+  <container class='cont-body'>
+    <div class='single-story-box'>
+      <% if(story.published) {%>
+      <h1><%= story.title %></h1>
+      <h3> story started by: <%= story.name %></h3>
+      <img src="<%= story.img_url %>"></img>
+      <p><%= story.beginning_story %></p>
+      <% for (let contribution of contributions) { %>
+        <% if (contribution.accepted_at) { %>
+          <p><%= contribution.text_addon%></p>
+        <% } %>
+      <% } %>
+      <p class ='hide'><%= story.created_at %></p>
+      <p class='status'>Status: Accepted!</p>
+      <% } else { %>
+      <h1><%= story.title %></h1>
+      <h3>story started by: <%= story.name %></h3>
+      <img src="<%= story.img_url %>"></img>
+      <div class="append">
+        <p><%= story.beginning_story %></p>
+        <% for (let contribution of contributions) {
+          if (contribution.accepted_at) { %>
+        <p><%= contribution.text_addon %></p>
+        <% }
+        } %>
+      </div>
+      <p class='hide'><%= story.created_at %></p>
+      <p class='status'>Status: Processing</p>
+    </div>
+    <% if(user == story.name_id) { %>
+    <form class="publish" action='/stories/<%= story.id %>/publish' method='POST'>
+      <button class='btn' class="publish" type="submit" publish-id=<%=story.id%>>Publish</button>
+    </form>
+    <% for (let contribution of contributions) {
+      if (contribution.accepted_at) { %>
+    <% } else { %>
+    <div class='author' contribution-id=<%=contribution.id%>>
+      <div class='submitted-by'>
+        <p>submitted by:</p>
+        <p><%= contribution.name %></p>
+      </div>
+      <h3><%= contribution.text_addon %></h3>
+      <div class='accept-rej'>
+        <p class='hide'><%= contribution.accepted_at %></p>
+        <textarea class='hide' id="mainvalue"><%= contribution.id %></textarea>
+        <form class="add-contribution" action='/stories/<%= story.id %>' method='PUT'>
+          <button class='btn' class="add-btn" type="submit" story-id=<%=story.id%> contribution-id=<%=contribution.id%>>
+            Accept</button>
+        </form>
+        <form class="delete-contribution" action='/stories/<%= story.id %>' method='POST'>
+          <button class='btn' class="delete" type="sumbit">Decline</button>
+        </form>
+      </div>
+    </div>
+    <% } %>
+    <% } %>
+    </div>
+    <p>Example Text</p>
+    </div>
+    <!-- ADD delete and publish -->
+    <% } else { %>
+    <div class='new-cont'>
+      <form class='contribution' action='/stories/<%= story.id %>' method='POST'>
+        <label for="contribution">Write your contribution here:</label>
+        <textarea type="text" id="text-addon" name="text_addon"></textarea>
+        <button class='btn' type="submit" value="submit">Submit</button>
+        <br><br>
+      </form>
+      <div class='reader'>
+        <% for (let contribution of contributions) { %>
+          <% if(!contribution.text_addon) { %>
+        <% } else { %>
+        <div class='reader-1'>
+          <div class='submitted-by'>
+            <p>submitted by:</p>
+            <p><%= contribution.name %></p>
+          </div>
+          <p class='text-addon'><%= contribution.text_addon %></p>
+          <p class='hide'><%= contribution.accepted_at %></p>
+          <div id="count" data-id=<%=story.id%>><%=contribution.count%></div>
+          <button class="btn like-btn" id="like" type="button" story-id=<%=story.id%>
+            contribution-id=<%=contribution.id%>> ✍️ </button>
+        </div>
+        <% } %>
+        <% } %>
+      </div>
+      <% } %>
+      <% } %>
+
+      <!-- story post container  -->
+      <section id="new-contribution"></section>
+  </container>
+</body>
+</html>
