@@ -4,10 +4,19 @@ require('dotenv').config();
 // Web server config
 const sassMiddleware = require('./lib/sass-middleware');
 const express = require('express');
+const bodyParser = require('body-parser');
+const sass = require('node-sass-middleware');
 const morgan = require('morgan');
 
 const PORT = process.env.PORT || 8080;
+const ENV = process.env.ENV || 'development';
 const app = express();
+
+const { Pool } = require('pg');
+const dbParams = require('./lib/db.js');
+const db = new Pool(dbParams);
+const cookieSession = require('cookie-session');
+db.connect();
 
 app.set('view engine', 'ejs');
 
@@ -15,6 +24,12 @@ app.set('view engine', 'ejs');
 // 'dev' = Concise output colored by response status for development use.
 //         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 app.use(morgan('dev'));
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
+
 app.use(express.urlencoded({ extended: true }));
 app.use(
   '/styles',
@@ -28,16 +43,19 @@ app.use(express.static('public'));
 
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
-const userApiRoutes = require('./routes/users-api');
-const widgetApiRoutes = require('./routes/widgets-api');
 const usersRoutes = require('./routes/users');
+const storyRoutes = require('./routes/stories');
+const loginRoutes = require('./routes/login');
+const contributionsRoute = require('./routes/contributions');
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 // Note: Endpoints that return data (eg. JSON) usually start with `/api`
-app.use('/api/users', userApiRoutes);
-app.use('/api/widgets', widgetApiRoutes);
 app.use('/users', usersRoutes);
+app.use('/stories', storyRoutes);
+app.use('/loginRoutes', loginRoutes);
+app.use('/contributions', contributionsRoute);
+
 // Note: mount other resources here, using the same pattern above
 
 // Home page
@@ -45,7 +63,7 @@ app.use('/users', usersRoutes);
 // Separate them into separate routes files (see above).
 
 app.get('/', (req, res) => {
-  res.render('homepage');
+  res.render('login');
 });
 
 app.listen(PORT, () => {
