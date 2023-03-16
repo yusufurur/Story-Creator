@@ -1,6 +1,6 @@
-INSERT INTO users (name)
+INSERT INTO users (name, password)
 VALUES ('Mahad Abdi'),
-('Zaki Guedi'),
-('Yusuf Urur'),
-('Vincent Lamar'),
-('Alex Ferguson');
+('Zaki Guedi', 'password'),
+('Yusuf Urur', 'password'),
+('Vincent Lamar', 'password'),
+('Alex Ferguson', 'password');

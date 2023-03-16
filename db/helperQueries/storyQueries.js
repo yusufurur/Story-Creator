@@ -62,10 +62,16 @@ const updateStory = (id) => {
     })
 }
 
+const storyPublished = (storyId) => {
+  const queryString = `UPDATE stories SET published = TRUE WHERE id = $1;`
+  return db.query(queryString, [storyId])
+}
+
 module.exports = {
   browseStory,
   browseSelectStories,
   getStoryById,
   addStory,
-  updateStory
+  updateStory,
+  storyPublished
 }
