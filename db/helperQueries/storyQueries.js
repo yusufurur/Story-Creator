@@ -34,8 +34,38 @@ const getStoryById = (id) => {
   .catch((err) => console.log("Error for getStoryById", err));
 }
 
+const addStory = function (story) {
+  const queryString = `
+  INSERT INTO stories
+    (name_id, beginning_story, title, img_url, created_at, published, completed_at)
+  VALUES ($1, $2, $3, $4, NOW(), FALSE, NULL)
+  RETURNING *;
+  `;
+
+  const queryParams = [story.name_id, story.beginning_story, story.title, story.img_url]
+  console.log(queryParams)
+  return db.query(queryString, queryParams)
+    .then(res => {
+      return res.rows[0];
+    })
+    .catch((err) => console.log("Error for addStory", err));
+}
+
+const updateStory = (id) => {
+  const queryString = `UPDATE stories SET title = $1, beginning_story = $2, img_url = $3 WHERE name_id = $4
+  RETURNING *;`
+  const queryParams = [req.body.title, req.body.beginning_story, req.body.img_url, req.params.id]
+
+  return db.query(queryString, queryParams)
+    .then(() => {
+      return console.log('WHAT DO WE DO!?')
+    })
+}
+
 module.exports = {
   browseStory,
   browseSelectStories,
-  getStoryById
+  getStoryById,
+  addStory,
+  updateStory
 }
